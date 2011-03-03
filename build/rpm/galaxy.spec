@@ -109,6 +109,7 @@ galaxy.agent.announce-interval: 60
 galaxy.agent.user: xncore
 galaxy.agent.pid-file: /home/xncore/galaxy-agent.pid
 EOF
+fi
 
 # Create /etc/rc.d files for Galaxy agent
 /sbin/chkconfig --add galaxy-agent
