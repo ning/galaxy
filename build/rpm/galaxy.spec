@@ -13,6 +13,13 @@ Requires: ruby
 BuildRoot: /tmp/galaxy-package
 Provides: rubygem(%{gemname}) = %{gemversion}
 
+Requires(pre): /usr/sbin/useradd, /usr/bin/getent
+Requires(postun): /usr/sbin/userdel
+
+%pre
+/usr/bin/getent group xncore || /usr/sbin/groupadd -r xncore
+/usr/bin/getent passwd xncore || /usr/sbin/useradd -r -m -d /home/xncore -s /sbin/nologin -g xncore xncore 
+
 %define gem %(ruby -rlib/galaxy/version -e 'puts "galaxy-#{Galaxy::Version}.gem"')
 
 # Use rpmbuild --define "_gonsole_url gonsole.prod.company.com" to customize
@@ -131,6 +138,8 @@ fi
 /sbin/chkconfig --del galaxy-console
 
 %postun
+# remove the user account
+/usr/sbin/userdel xncore
 # Uninstall the Galaxy gem
 gem uninstall -v=%{version} %{name}
 # rpm -Uvh will install first and uninstall the old version afterwards

@@ -14,16 +14,16 @@ fi
 case "$1" in
 'start')
         logger -p daemon.notice "Starting galaxy-console"
-        su - $GALAXY_USER -c 'galaxy-console --start'
+        sudo -u $GALAXY_USER galaxy-console --start
         ;;
 'stop')
         logger -p daemon.notice "Stopping galaxy-console"
-        su - $GALAXY_USER -c 'galaxy-console --stop'
+        sudo -u $GALAXY_USER galaxy-console --stop
         ;;
 'restart')
         logger -p daemon.notice "Restarting galaxy-console"
-        su - $GALAXY_USER -c 'galaxy-console --stop'
-        su - $GALAXY_USER -c 'galaxy-console --start'
+        sudo -u $GALAXY_USER galaxy-console --stop
+        sudo -u $GALAXY_USER galaxy-console --start
         ;;
 'status') 
         galaxy-console --status
