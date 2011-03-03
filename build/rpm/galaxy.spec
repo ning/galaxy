@@ -9,7 +9,7 @@ License: Apache License, version 2.0
 Group: Development/Tools/Other
 URL: http://github.com/ning/galaxy
 BuildArch: noarch
-Requires: ruby
+Requires: ruby, rubygems, ruby-devel, ImageMagick-devel, gcc
 BuildRoot: /tmp/galaxy-package
 Provides: rubygem(%{gemname}) = %{gemversion}
 
