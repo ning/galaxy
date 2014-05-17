@@ -9,9 +9,16 @@ License: Apache License, version 2.0
 Group: Development/Tools/Other
 URL: http://github.com/ning/galaxy
 BuildArch: noarch
-Requires: ruby
+Requires: ruby, rubygems, ruby-devel, ImageMagick-devel, gcc
 BuildRoot: /tmp/galaxy-package
 Provides: rubygem(%{gemname}) = %{gemversion}
+
+Requires(pre): /usr/sbin/useradd, /usr/bin/getent
+Requires(postun): /usr/sbin/userdel
+
+%pre
+/usr/bin/getent group xncore || /usr/sbin/groupadd -r xncore
+/usr/bin/getent passwd xncore || /usr/sbin/useradd -r -m -d /home/xncore -s /sbin/nologin -g xncore xncore 
 
 %define gem %(ruby -rlib/galaxy/version -e 'puts "galaxy-#{Galaxy::Version}.gem"')
 
@@ -109,6 +116,7 @@ galaxy.agent.announce-interval: 60
 galaxy.agent.user: xncore
 galaxy.agent.pid-file: /home/xncore/galaxy-agent.pid
 EOF
+fi
 
 # Create /etc/rc.d files for Galaxy agent
 /sbin/chkconfig --add galaxy-agent
@@ -130,6 +138,8 @@ EOF
 /sbin/chkconfig --del galaxy-console
 
 %postun
+# remove the user account
+/usr/sbin/userdel xncore
 # Uninstall the Galaxy gem
 gem uninstall -v=%{version} %{name}
 # rpm -Uvh will install first and uninstall the old version afterwards

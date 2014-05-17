@@ -14,22 +14,20 @@ fi
 case "$1" in
 'start')
         logger -p daemon.notice "Starting galaxy-agent"
-        su - $GALAXY_USER -c 'galaxy-agent --start'
+        sudo -u $GALAXY_USER galaxy-agent --start
         ;;
 'stop')
         logger -p daemon.notice "Stopping galaxy-agent"
-        su - $GALAXY_USER -c 'galaxy-agent --stop'
+        sudo -u $GALAXY_USER galaxy-agent --stop
         ;;
 'restart')
         logger -p daemon.notice "Restarting galaxy-agent"
         su - $GALAXY_USER -c 'galaxy-agent --stop'
-        su - $GALAXY_USER -c 'galaxy-agent --start'
-        ;;
-'status') 
-        galaxy-agent --status
+        sudo -u $GALAXY_USER galaxy-agent --stop
+        sudo -u $GALAXY_USER galaxy-agent --start
         ;;
 *)
-        echo "Usage: $0 <start|stop|restart|status>"
+        echo "Usage: $0 <start|stop|restart>"
         exit 1
         ;;
 esac
